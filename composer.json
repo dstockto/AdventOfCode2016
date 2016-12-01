@@ -1,0 +1,13 @@
+{
+    "name": "dstockto/advent2016",
+    "require": {
+        "phpspec/phpspec": "^3.2",
+        "tightenco/collect": "^5.3"
+    },
+    "authors": [
+        {
+            "name": "David Stockton",
+            "email": "dave@davidstockton.com"
+        }
+    ]
+}
