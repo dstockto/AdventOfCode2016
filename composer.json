@@ -9,5 +9,10 @@
             "name": "David Stockton",
             "email": "dave@davidstockton.com"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "Advent\\": "src/Advent"
+        }
+    }
 }
