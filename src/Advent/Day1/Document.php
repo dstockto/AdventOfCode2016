@@ -5,9 +5,14 @@ namespace Advent\Day1;
 
 use Illuminate\Support\Collection;
 
+/**
+ * Combines a Direction object to keep track of which way we are facing along with a list of instructions indicating
+ * which direction to turn and how many blocks to walk.
+ *
+ * @package Advent\Day1
+ */
 class Document
 {
-
     /**
      * @var string
      */
@@ -19,6 +24,12 @@ class Document
         $this->instructions = $instructions;
     }
 
+    /**
+     * Runs through the directions provides and gives back the distance from the origin to the final destination in
+     * terms of a single MovementVector.
+     *
+     * @return MovementVector
+     */
     public function getDistance(): MovementVector
     {
         $start = $this->direction->getMovementVector(0);
@@ -30,10 +41,17 @@ class Document
         return $result;
     }
 
+    /**
+     * The puzzle calls for a taxi distance which is the total number of blocks north or south plus the total number
+     * of blocks east or west to travel if going from the origin straight to the destination instead of through the
+     * convoluted and backtracking path the directions wanted us to follow.
+     *
+     * @return int
+     */
     public function getTaxiDistance(): int
     {
         $vector = $this->getDistance();
-        return $vector->getTaxiDistance();
+        return (int) abs($vector->getXMovement()) + abs($vector->getYMovement());
     }
 
     public function getFirstVisitedTwiceDistance(): int
@@ -59,24 +77,25 @@ class Document
 
     protected function getMovementVectors(): Collection
     {
-        return collect(explode(',', $this->instructions))->map(
-            function ($pair) {
-                return trim($pair);
-            }
-        )->filter(function ($pair) {
-            return $pair != '';
-        })->map(function ($pair) {
-            preg_match('/(?P<direction>L|R)(?P<distance>\d+)/', $pair, $matches);
+        if ($this->instructions === '') {
+            return collect();
+        }
 
-            if ($matches['direction'] == 'L') {
-                $this->direction->turnLeft();
-            } else {
-                if ($matches['direction'] == 'R') {
-                    $this->direction->turnRight();
+        $result = collect(explode(',', $this->instructions) ?? [])->map(
+            function (string $rotateDistance) {
+                if (0 === preg_match('/(?<direction>R|L)(?P<distance>\d+)/', $rotateDistance, $matches)) {
+                    return;
                 }
-            }
+                if ($matches['direction'] === 'R') {
+                    $this->direction->turnRight();
+                } elseif ($matches['direction'] === 'L') {
+                    $this->direction->turnLeft();
+                }
 
-            return $this->direction->getMovementVector((int) $matches['distance']);
-        });
+                return $this->direction->getMovementVector((int) $matches['distance']);
+            }
+        );
+
+        return $result;
     }
 }

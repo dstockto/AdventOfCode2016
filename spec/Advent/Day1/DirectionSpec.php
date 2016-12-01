@@ -9,41 +9,41 @@ use PhpSpec\ObjectBehavior;
 
 class DirectionSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType(Direction::class);
     }
 
-    function it_will_face_north_by_default()
+    public function it_will_face_north_by_default()
     {
         $this->getDirection()->shouldBe('north');
     }
 
-    function it_can_face_west_to_start()
+    public function it_can_face_west_to_start()
     {
         $this->beConstructedWith('west');
         $this->getDirection()->shouldBe('west');
     }
 
-    function it_can_face_east_to_start()
+    public function it_can_face_east_to_start()
     {
         $this->beConstructedWith('east');
         $this->getDirection()->shouldBe('east');
     }
 
-    function it_can_face_south_to_start()
+    public function it_can_face_south_to_start()
     {
         $this->beConstructedWith('south');
         $this->getDirection()->shouldBe('south');
     }
 
-    function it_can_face_north_to_start()
+    public function it_can_face_north_to_start()
     {
         $this->beConstructedWith('north');
         $this->getDirection()->shouldBe('north');
     }
 
-    function it_can_turn_left()
+    public function it_can_turn_left()
     {
         $this->turnLeft();
         $this->getDirection()->shouldBe('west');
@@ -55,7 +55,7 @@ class DirectionSpec extends ObjectBehavior
         $this->getDirection()->shouldBe('north');
     }
 
-    function it_can_turn_right()
+    public function it_can_turn_right()
     {
         $this->turnRight();
         $this->getDirection()->shouldBe('east');
@@ -67,7 +67,7 @@ class DirectionSpec extends ObjectBehavior
         $this->getDirection()->shouldBe('north');
     }
 
-    function it_can_return_a_movement_vector_for_unit_north()
+    public function it_can_return_a_movement_vector_for_unit_north()
     {
         $result = $this->getMovementVector(1);
         $result->shouldHaveType(MovementVector::class);
@@ -75,7 +75,7 @@ class DirectionSpec extends ObjectBehavior
         $result->getYMovement()->shouldBe(1);
     }
 
-    function it_can_return_a_movement_vector_for_multiplied_east()
+    public function it_can_return_a_movement_vector_for_multiplied_east()
     {
         $this->beConstructedWith('east');
         $result = $this->getMovementVector(8);
@@ -84,7 +84,7 @@ class DirectionSpec extends ObjectBehavior
         $result->getYMovement()->shouldBe(0);
     }
 
-    function it_can_return_movement_vector_for_west()
+    public function it_can_return_movement_vector_for_west()
     {
         $this->beConstructedWith('west');
         $result = $this->getMovementVector(2);
@@ -93,7 +93,7 @@ class DirectionSpec extends ObjectBehavior
         $result->getYMovement()->shouldBe(0);
     }
 
-    function it_can_return_movement_ventor_for_south()
+    public function it_can_return_movement_ventor_for_south()
     {
         $this->beConstructedWith('south');
         $result = $this->getMovementVector(3);
