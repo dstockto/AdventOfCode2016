@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace spec\Advent\Day1;
 
@@ -46,5 +47,31 @@ class MovementVectorSpec extends ObjectBehavior
         $result->shouldHaveType(MovementVector::class);
         $result->getXMovement()->shouldBe(2);
         $result->getYMovement()->shouldBe(4);
+    }
+
+    function it_can_get_its_own_taxi_distance_1()
+    {
+        $this->beConstructedWith(1, 1);
+        $this->getTaxiDistance()->shouldBe(2);
+    }
+
+    function it_can_get_its_own_taxi_distance_2()
+    {
+        $this->beConstructedWith(2, -2);
+        $this->getTaxiDistance()->shouldBe(4);
+    }
+
+    function it_can_get_a_list_of_unit_vectors_for_itself()
+    {
+        $this->beConstructedWith(-3, 3);
+        $result = $this->getUnitMovements();
+        $result->shouldHaveCount(6);
+        $result[0]->getXMovement()->shouldBe(-1);
+        $result[1]->getXMovement()->shouldBe(-1);
+        $result[2]->getXMovement()->shouldBe(-1);
+
+        $result[3]->getYMovement()->shouldBe(1);
+        $result[4]->getYMovement()->shouldBe(1);
+        $result[5]->getYMovement()->shouldBe(1);
     }
 }
