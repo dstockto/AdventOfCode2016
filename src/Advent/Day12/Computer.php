@@ -5,7 +5,8 @@ namespace Advent\Day12;
 
 class Computer
 {
-    private $instructions;
+    /** @var array */
+    protected $instructions;
     /** @var int */
     private $instructionPointer;
     /** @var Register[] */
@@ -35,6 +36,9 @@ class Computer
             case 'cpy':
                 list($value, $register) = explode(' ', $args);
                 if (is_numeric($value)) {
+                    if (is_numeric($register)) {
+                        throw new \Exception('Nothing good.');
+                    }
                     $this->registers[$register]->setValue((int)$value);
                 } else {
                     $this->registers[$register]->setValue($this->getRegisterValue($value));
@@ -50,15 +54,18 @@ class Computer
                 list ($register, $jump) = explode(' ', $args);
                 if (is_numeric($register)) {
                     if ((int)$register !== 0) {
-                        $this->instructionPointer += (int)$jump;
+                        if (!is_numeric($jump)) {
+                            $jump = $this->getRegisterValue($jump);
+                        }
+                        $this->incrementInstructionPointer((int)$jump);
                         return;
                     } else {
-                        $this->instructionPointer++;
+                        $this->incrementInstructionPointer();
                         return;
                     }
                 }
                 if ($this->registers[$register]->getValue() !== 0) {
-                    $this->instructionPointer += (int)$jump;
+                    $this->incrementInstructionPointer((int)$jump);
                     return;
                 }
                 break;
@@ -67,9 +74,16 @@ class Computer
                 $total = $this->registers[$target]->getValue() + $this->registers[$add]->getValue();
                 $this->registers[$target]->setValue($total);
                 break;
+
+            case 'mul':
+                list($target, $x, $y) = explode(' ', $args);
+                $total = $this->registers[$target]->getValue() +
+                    $this->registers[$x]->getValue() * $this->registers[$y]->getValue();
+                $this->registers[$target]->setValue($total);
+                break;
         }
 
-        $this->instructionPointer++;
+        $this->incrementInstructionPointer();
     }
 
     public function getRegisterValue(string $register): int
@@ -133,7 +147,7 @@ class Computer
     /**
      * @return string
      */
-    private function getRegistersAsString(): string
+    protected function getRegistersAsString(): string
     {
         return sprintf(
             "A: %d B: %d C: %d D: %d\n",
@@ -142,5 +156,15 @@ class Computer
             $this->getRegisterValue('c'),
             $this->getRegisterValue('d')
         );
+    }
+
+    /**
+     * @param int $amount
+     * @return int
+     */
+    protected function incrementInstructionPointer(int $amount = 1): int
+    {
+        $this->instructionPointer += $amount;
+        return $this->instructionPointer;
     }
 }
