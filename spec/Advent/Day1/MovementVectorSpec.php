@@ -48,7 +48,7 @@ class MovementVectorSpec extends ObjectBehavior
         $result->getXMovement()->shouldBe(2);
         $result->getYMovement()->shouldBe(4);
     }
-    
+
     public function it_can_get_its_own_taxi_distance_1()
     {
         $this->beConstructedWith(1, 1);
