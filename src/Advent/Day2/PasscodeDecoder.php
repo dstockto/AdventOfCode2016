@@ -14,7 +14,6 @@ class PasscodeDecoder
 
     public function getBathroomCode(): string
     {
-//        $keypad = new Keypad();
         $keypad = new ExecutiveKeypad(
             [
                 '123',
